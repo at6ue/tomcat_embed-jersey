@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'eclipse'
+}
+
+sourceCompatibility = JAVA_VERSION
+targetCompatibility = JAVA_VERSION
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    /**
+    * Tomcat
+    */
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: TOMCAT_VERSION
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: TOMCAT_VERSION
+    // Required until Tomcat8.0
+    // implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-logging-juli', version: "8.0.20"
+    // Required for database access
+    implementation group: 'org.apache.tomcat', name: 'tomcat-dbcp', version: TOMCAT_VERSION
+
+    /**
+    * Jersey
+    */
+    implementation group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: JERSEY_VERSION
+    // Required since Jersey 2.26
+    implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: JERSEY_VERSION
+    // Used for Bean Validation
+    implementation group: 'org.glassfish.jersey.ext', name: 'jersey-bean-validation', version: JERSEY_VERSION
+    implementation group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: JERSEY_VERSION
+
+
+    /**
+    * H2 Database
+    */
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+
+    /**
+    * Others
+    */
+    implementation group: 'javax.transaction', name: 'javax.transaction-api', version: '1.3'
+}
+
+mainClassName = 'com.github.at6ue.tomcat_embed.App'
+
+tasks.withType(JavaCompile)    {
+    options.encoding = 'UTF-8'
+}

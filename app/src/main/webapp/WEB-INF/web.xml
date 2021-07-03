@@ -1,0 +1,11 @@
+<web-app version="3.0"
+  xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <servlet>
+    <servlet-name>com.github.at6ue.jersey.basic.BasicApplication</servlet-name>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>com.github.at6ue.jersey.basic.BasicApplication</servlet-name>
+    <url-pattern>/basic</url-pattern>
+  </servlet-mapping>
+</web-app>

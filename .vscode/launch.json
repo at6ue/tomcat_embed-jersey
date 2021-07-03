@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run",
+            "request": "launch",
+            "mainClass": "com.github.at6ue.tomcat_embed.App",
+            "projectName": "app",
+            "cwd": "${workspaceFolder}/app"
+        }
+    ]
+}
