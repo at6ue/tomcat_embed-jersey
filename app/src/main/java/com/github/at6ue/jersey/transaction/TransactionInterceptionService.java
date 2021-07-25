@@ -19,7 +19,7 @@ public class TransactionInterceptionService implements InterceptionService {
     private final List<MethodInterceptor> interceptors;
 
     @Inject
-    TransactionInterceptionService(ServiceLocator locator, MethodInterceptor interceptor) {
+    TransactionInterceptionService(ServiceLocator locator, TransactionInterceptor interceptor) {
         locator.inject(interceptor);
         this.interceptors = List.of(interceptor);
     }

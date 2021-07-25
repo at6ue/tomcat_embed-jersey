@@ -8,16 +8,15 @@ import javax.ws.rs.ApplicationPath;
 import com.github.at6ue.jersey.injection.GreetingService;
 import com.github.at6ue.jersey.injection.HelloService;
 import com.github.at6ue.jersey.injection.IdentityService;
-import com.github.at6ue.jersey.transaction.ConnectionProvider;
+import com.github.at6ue.jersey.transaction.ConnectionSupplier;
 import com.github.at6ue.jersey.transaction.DatabaseInitializer;
 import com.github.at6ue.jersey.transaction.TransactionInterceptionService;
 import com.github.at6ue.jersey.transaction.TransactionInterceptor;
 import com.github.at6ue.jersey.validation.ConstraintViolationExceptionMapper;
 import com.github.at6ue.jersey.validation.ValidationConfigurationContextResolver;
 
-import org.aopalliance.intercept.MethodInterceptor;
 import org.glassfish.hk2.api.InterceptionService;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.process.internal.RequestScoped;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -47,9 +46,9 @@ public class AppConfig extends ResourceConfig {
                 bindAsContract(IdentityService.class);
 
                 // For demonstration of transaction
-                bind(TransactionInterceptor.class).to(MethodInterceptor.class).in(Singleton.class);
+                bindAsContract(TransactionInterceptor.class).in(Singleton.class);
                 bind(TransactionInterceptionService.class).to(InterceptionService.class).in(Singleton.class);
-                bindFactory(ConnectionProvider.class).to(Connection.class).proxy(true).proxyForSameScope(false)
+                bindFactory(ConnectionSupplier.class).to(Connection.class).proxy(true).proxyForSameScope(false)
                         .in(RequestScoped.class);
             }
         });

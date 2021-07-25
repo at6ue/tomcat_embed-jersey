@@ -7,12 +7,12 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.glassfish.hk2.api.Factory;
+import org.glassfish.jersey.internal.inject.DisposableSupplier;
 
-public class ConnectionProvider implements Factory<Connection> {
+public class ConnectionSupplier implements DisposableSupplier<Connection> {
 
     @Override
-    public Connection provide() {
+    public Connection get() {
         try {
             var ds = (DataSource) InitialContext.doLookup("java:comp/env/jdbc/h2db");
             var con = ds.getConnection();
