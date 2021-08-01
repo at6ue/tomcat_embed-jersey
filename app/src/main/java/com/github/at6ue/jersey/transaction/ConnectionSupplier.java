@@ -16,19 +16,21 @@ public class ConnectionSupplier implements DisposableSupplier<Connection> {
         try {
             var ds = (DataSource) InitialContext.doLookup("java:comp/env/jdbc/h2db");
             var con = ds.getConnection();
-            System.out.println("connection provided");
+            con.setAutoCommit(false);
+            System.out.println("Supplied");
             return con;
         } catch (NamingException | SQLException e) {
-            System.out.println("connection failed");
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public void dispose(Connection instance) {
-        System.out.println("connection closing...");
+        System.out.println("Closing...");
         try {
             if (!instance.isClosed()) {
+                System.out.println("Roll back");
+                instance.rollback();
                 instance.close();
             }
         } catch (SQLException e) {

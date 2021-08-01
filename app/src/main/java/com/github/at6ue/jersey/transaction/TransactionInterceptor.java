@@ -14,19 +14,17 @@ public class TransactionInterceptor implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        System.out.println("Begin");
-        connection.setAutoCommit(false);
         try {
             var ret = invocation.proceed();
-            System.out.println("Commit");
             if (!connection.isClosed()) {
+                System.out.println("[AOP] Commit");
                 connection.commit();
                 connection.close();
             }
             return ret;
         } catch (Throwable t) {
-            System.out.println("Roll back");
             if (!connection.isClosed()) {
+                System.out.println("[AOP] Roll back");
                 connection.rollback();
                 connection.close();
             }

@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Range;
 @Path("positive")
 public class Positive {
 
-    private static final String SELECT_FROM_POSITIVE = "select * from positive";
+    private static final String SELECT_VALUE_FROM_POSITIVE = "select value from positive";
 
     @Inject
     private Connection connection;
@@ -22,15 +22,15 @@ public class Positive {
     /**
      * 
      * @param n Request body which must be an integer number
-     * @return
+     * @return Message with current value
      * @throws SQLException
      */
     @Transactional
     @PUT
     public String add(@Range(min = Integer.MIN_VALUE, max = Integer.MAX_VALUE) String n) throws SQLException {
-        try (var select = connection.createStatement();
+        try (var select = connection.prepareStatement(SELECT_VALUE_FROM_POSITIVE);
                 var update = connection.prepareStatement("update positive set value = ?")) {
-            var result = select.executeQuery(SELECT_FROM_POSITIVE);
+            var result = select.executeQuery();
             result.next();
             var current = result.getInt("value");
             var sum = current + Integer.parseInt(n);
@@ -42,6 +42,10 @@ public class Positive {
                 // Transaction should roll back
                 throw new NegativeException();
             }
+
+            // System.out.println("Commit");
+            // connection.commit();
+            // connection.close();
 
             return getMessage(sum);
         }
@@ -55,11 +59,8 @@ public class Positive {
      */
     @GET
     public String query() throws SQLException {
-        connection.setReadOnly(true);
-        // assert connection.isReadOnly(); // not working :(
-        try (var con = connection; var select = con.createStatement()) {
-            // Connection should be closed in this scope
-            var result = select.executeQuery(SELECT_FROM_POSITIVE);
+        try (var con = connection; var select = con.prepareStatement(SELECT_VALUE_FROM_POSITIVE)) {
+            var result = select.executeQuery();
             result.next();
             var current = result.getInt("value");
             return getMessage(current);

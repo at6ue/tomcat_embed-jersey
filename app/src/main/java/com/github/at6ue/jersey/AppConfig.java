@@ -36,7 +36,7 @@ public class AppConfig extends ResourceConfig {
         register(ValidationFeature.class);
         register(ValidationConfigurationContextResolver.class);
         register(ConstraintViolationExceptionMapper.class);
-        
+
         register(new AbstractBinder() {
             @Override
             protected void configure() {
@@ -46,7 +46,7 @@ public class AppConfig extends ResourceConfig {
                 bindAsContract(IdentityService.class);
 
                 // For demonstration of transaction
-                bindAsContract(TransactionInterceptor.class).in(Singleton.class);
+                bindAsContract(TransactionInterceptor.class);
                 bind(TransactionInterceptionService.class).to(InterceptionService.class).in(Singleton.class);
                 bindFactory(ConnectionSupplier.class).to(Connection.class).proxy(true).proxyForSameScope(false)
                         .in(RequestScoped.class);
